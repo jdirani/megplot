@@ -1,10 +1,8 @@
 # J. Dirani
 # Quick way to plot eelbrain results
 
-from scipy import stats
-import mne, os, eelbrain, pickle, itertools
+import mne, eelbrain
 import numpy as np
-import pandas as pd
 
 
 def plot(res, ds, out_dir, match, subjects_dir, surf=None):
