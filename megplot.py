@@ -73,7 +73,7 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None):
         brain.save_image(out_dir+'Cluster #%s, Effect = %s - Brain.png'%(cluster_nb, effect))
         brain.close()
             # 3) Bars
-        ds['average_source_activation'] = timecourse.mean(time=(tstart,tstop)) #!!! should be restrained to my sign timewindow
+        ds['average_source_activation'] = timecourse.mean(time=(tstart,tstop))
         bar = eelbrain.plot.Barplot(ds['average_source_activation'], X=effect, ds=ds, match=match)
         bar.save(out_dir+'Cluster #%s, Effect = %s - Bars.png'%(cluster_nb, effect))
         bar.close()
