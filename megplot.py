@@ -5,7 +5,7 @@ import mne, eelbrain
 import numpy as np
 
 
-def plot(res, ds, out_dir, match, subjects_dir, surf=None):
+def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None):
 
     '''
     Plot Timecourse, Brain, and Barplot of signidicant clusters from an eelbrain ANOVA/t-test results object.
@@ -26,6 +26,9 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None):
 
     match : str | None
     Match cases for a repeated measures design in pairwsie t-test for barplots.
+    
+    hemi: 'lh' | 'rh'
+    Hemisphere. Defaults to 'lh'
 
 
     subjects_dir : str
@@ -36,6 +39,8 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None):
 
     if surf == None:
         surf = 'white'
+    if hemi == None:
+        hemi = 'lh'
 
     src = ds['stc']
 
@@ -54,10 +59,10 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None):
         # save significant cluster as a temporary label for plotting.
         ds['stc'] = src
         label = eelbrain.labels_from_clusters(cluster)
-        label[0].name = 'TempLabel-lh'
+        label[0].name = 'TempLabel-%s'%hemi
         mne.write_labels_to_annot(label,subject='fsaverage', parc='workspace' ,subjects_dir=subjects_dir, overwrite=True)
         src.source.set_parc('workspace')
-        src_region = src.sub(source='TempLabel-lh')
+        src_region = src.sub(source='TempLabel-%s'%hemi)
         ds['stc'] = src_region
         timecourse = src_region.mean('source')
 
