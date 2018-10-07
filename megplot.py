@@ -74,7 +74,7 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None):
         activation.save(out_dir+'Cluster #%s, Effect = %s - Timecourse.png'%(cluster_nb, effect))
         activation.close()
             # 2) Brain
-        brain = eelbrain.plot.brain.cluster(cluster.mean('time'), subjects_dir=subjects_dir, surf=surf, colorbar=True)
+        brain = eelbrain.plot.brain.cluster(cluster.mean(time=(tstart,tstop)), subjects_dir=subjects_dir, surf=surf, colorbar=True)
         brain.save_image(out_dir+'Cluster #%s, Effect = %s - Brain.png'%(cluster_nb, effect))
         brain.close()
             # 3) Bars
