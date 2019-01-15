@@ -5,7 +5,7 @@ import mne, eelbrain
 import numpy as np
 
 
-def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None):
+def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None, pmin=None):
 
     '''
     Plot Timecourse, Brain, and Barplot of signidicant clusters from an eelbrain ANOVA/t-test results object.
@@ -26,13 +26,16 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None):
 
     match : str | None
     Match cases for a repeated measures design in pairwsie t-test for barplots.
-    
+
     hemi: 'lh' | 'rh'
     Hemisphere. Defaults to 'lh'
 
 
     subjects_dir : str
     subjects directory associated with the source space dimension.
+
+    pmin: float
+    permutation p-value (threshold)
 
     '''
 
@@ -41,10 +44,12 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None):
         surf = 'white'
     if hemi == None:
         hemi = 'lh'
+    if pmin == None:
+        pmin = 0.05
 
     src = ds['stc']
 
-    mask_sign_clusters = np.where(res.clusters['p'] <= 0.05, True, False)
+    mask_sign_clusters = np.where(res.clusters['p'] <= pmin, True, False)
     sign_clusters = res.clusters[mask_sign_clusters]
 
     for i in range(sign_clusters.n_cases):
