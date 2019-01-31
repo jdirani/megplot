@@ -90,4 +90,4 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None, pmin=None)
             bar.close()
 
 
-    ds['stc'] = src # resets ds['stc'] before exiting the loop. Otherwise, returns an errror if make_report is run again.
+    ds['stc'] = src # resets ds['stc'] before exiting the loop. Otherwise, returns an errror if run again.
