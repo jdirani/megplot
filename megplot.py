@@ -47,7 +47,7 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None, pmin=None)
     if pmin == None:
         pmin = 0.05
 
-    src = ds['stc']
+    reset_stc = ds['stc']
 
     mask_sign_clusters = np.where(res.clusters['p'] <= pmin, True, False)
     sign_clusters = res.clusters[mask_sign_clusters]
@@ -63,14 +63,13 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None, pmin=None)
             effect = effect.replace(' x ', '%') # Changing format of string for interaction effects.
 
             # save significant cluster as a temporary label for plotting.
-            ds['stc'] = src
+            ds['stc'] = reset_stc
             label = eelbrain.labels_from_clusters(cluster)
             label[0].name = 'TempLabel-%s'%hemi
             mne.write_labels_to_annot(label,subject='fsaverage', parc='workspace' ,subjects_dir=subjects_dir, overwrite=True)
-            src.source.set_parc('workspace')
-            src_region = src.sub(source='TempLabel-%s'%hemi)
-            ds['stc'] = src_region
-            timecourse = src_region.mean('source')
+            ds['stc'].source.set_parc('workspace')
+            ds['stc'] = ds['stc'].sub(source='TempLabel-%s'%hemi)
+            timecourse = ds['stc'].mean('source')
 
 
             #Plot
@@ -90,4 +89,4 @@ def plot(res, ds, out_dir, match, subjects_dir, surf=None, hemi=None, pmin=None)
             bar.close()
 
 
-    ds['stc'] = src # resets ds['stc'] before exiting the loop. Otherwise, returns an errror if run again.
+    ds['stc'] = reset_stc # resets ds['stc'] before exiting the loop. Otherwise, returns an errror if run again.
